@@ -20,9 +20,44 @@ function Library:CreateWindow(title, subtitle)
     Main.BorderSizePixel = 0
     Main.Parent = ScreenGui
     Main.ClipsDescendants = true
+    TitleBar.Active = true
+    TitleBar.Draggable = true
 
     Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 10)
 
+    -- Close button
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 30, 1, 0)
+    CloseBtn.Position = UDim2.new(1, -35, 0, 0)
+    CloseBtn.Text = "X"
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextSize = 14
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+    CloseBtn.BackgroundTransparency = 1
+    CloseBtn.Parent = TitleBar
+    
+    CloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+    
+    -- Minimize button
+    local MinBtn = Instance.new("TextButton")
+    MinBtn.Size = UDim2.new(0, 30, 1, 0)
+    MinBtn.Position = UDim2.new(1, -70, 0, 0)
+    MinBtn.Text = "-"
+    MinBtn.Font = Enum.Font.GothamBold
+    MinBtn.TextSize = 14
+    MinBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    MinBtn.BackgroundTransparency = 1
+    MinBtn.Parent = TitleBar
+    
+    local minimized = false
+    MinBtn.MouseButton1Click:Connect(function()
+        minimized = not minimized
+        Main.Size = minimized and UDim2.new(0, 600, 0, 40) or UDim2.new(0, 600, 0, 400)
+    end)
+
+    
     -- Titlebar
     local TitleBar = Instance.new("Frame")
     TitleBar.Size = UDim2.new(1, 0, 0, 40)
@@ -225,3 +260,4 @@ function Library:CreateWindow(title, subtitle)
 end
 
 return Library
+
