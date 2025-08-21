@@ -76,6 +76,49 @@ function Library:CreateWindow(title, version)
     Title.Parent = TitleBar
     Title.ZIndex = 2
 
+    -- Tombol Close
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 25, 0, 25)
+    CloseBtn.Position = UDim2.new(1, -30, 0.5, -12)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+    CloseBtn.Text = "X"
+    CloseBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextSize = 14
+    CloseBtn.Parent = TitleBar
+    Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(1, 0)
+    
+    CloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+    
+    -- Tombol Minimize
+    local MinBtn = Instance.new("TextButton")
+    MinBtn.Size = UDim2.new(0, 25, 0, 25)
+    MinBtn.Position = UDim2.new(1, -60, 0.5, -12)
+    MinBtn.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
+    MinBtn.Text = "-"
+    MinBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    MinBtn.Font = Enum.Font.GothamBold
+    MinBtn.TextSize = 18
+    MinBtn.Parent = TitleBar
+    Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
+    
+    -- fungsi minimize
+    local minimized = false
+    MinBtn.MouseButton1Click:Connect(function()
+        minimized = not minimized
+        if minimized then
+            Sidebar.Visible = false
+            Content.Visible = false
+            Main.Size = UDim2.new(0, 250, 0, 40) -- shrink biar cuma titlebar
+        else
+            Sidebar.Visible = true
+            Content.Visible = true
+            Main.Size = UDim2.new(0, 650, 0, 420) -- balikin ukuran normal
+        end
+    end)
+
     -- Version
     local Version = Instance.new("TextLabel")
     Version.Size = UDim2.new(0, 90, 1, 0)
@@ -174,4 +217,5 @@ function Library:CreateWindow(title, version)
 end
 
 return Library
+
 
