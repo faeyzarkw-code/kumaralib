@@ -49,11 +49,21 @@ function Library:CreateWindow(title)
 
     -- Main Frame
     local Main = Instance.new("Frame")
-    Main.Size = UDim2.new(0, 700, 0, 450)
-    Main.Position = UDim2.new(0.5, -350, 0.5, -225)
-    Main.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+    Main.Size = UDim2.new(0, 600, 0, 400)
+    Main.Position = UDim2.new(0.5, -300, 0.5, -200)
+    Main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    Main.BackgroundTransparency = 0.15  -- 0 = solid, 1 = full transparan
     Main.BorderSizePixel = 0
-    Main.Parent = ScreenGui
+    Main.Parent = game.CoreGui
+    
+    -- Rounded corner
+    Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
+    
+    -- Stroke pinggiran
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(80, 80, 90)
+    stroke.Thickness = 1.5
+    stroke.Parent = Main
 
     -- Title Bar
     local TitleBar = Instance.new("Frame")
@@ -110,3 +120,4 @@ function Library:CreateWindow(title)
 end
 
 return Library
+
