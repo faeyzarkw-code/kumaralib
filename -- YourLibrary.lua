@@ -97,6 +97,11 @@ function Library:CreateWindow(title, version)
     Sidebar.BorderSizePixel = 0
     Sidebar.Parent = Main
     Sidebar.ZIndex = 1
+    
+    -- layout biar button tab turun kebawah
+    local list = Instance.new("UIListLayout", Sidebar)
+    list.SortOrder = Enum.SortOrder.LayoutOrder
+    list.Padding = UDim.new(0, 5)
 
     -- Content
     local Content = Instance.new("Frame")
@@ -112,7 +117,6 @@ function Library:CreateWindow(title, version)
     local function createSidebarButton(name, callback)
         local btn = Instance.new("TextButton")
         btn.Size = UDim2.new(1, -10, 0, 30)
-        btn.Position = UDim2.new(0, 5, 0, 0)
         btn.BackgroundTransparency = 1
         btn.Text = name
         btn.Font = Enum.Font.Gotham
@@ -120,6 +124,7 @@ function Library:CreateWindow(title, version)
         btn.TextSize = 14
         btn.TextXAlignment = Enum.TextXAlignment.Left
         btn.Parent = Sidebar
+        btn.LayoutOrder = #Sidebar:GetChildren()  -- << ini buat urut
 
         btn.MouseEnter:Connect(function()
             TweenService:Create(btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255,255,255)}):Play()
@@ -169,3 +174,4 @@ function Library:CreateWindow(title, version)
 end
 
 return Library
+
