@@ -2,7 +2,6 @@
 -- Custom UI Library mirip Voidware/Fluent
 
 local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
 
 local Library = {}
 
@@ -20,50 +19,16 @@ function Library:CreateWindow(title, subtitle)
     Main.BorderSizePixel = 0
     Main.Parent = ScreenGui
     Main.ClipsDescendants = true
-    TitleBar.Active = true
-    TitleBar.Draggable = true
-
     Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 10)
 
-    -- Close button
-    local CloseBtn = Instance.new("TextButton")
-    CloseBtn.Size = UDim2.new(0, 30, 1, 0)
-    CloseBtn.Position = UDim2.new(1, -35, 0, 0)
-    CloseBtn.Text = "X"
-    CloseBtn.Font = Enum.Font.GothamBold
-    CloseBtn.TextSize = 14
-    CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
-    CloseBtn.BackgroundTransparency = 1
-    CloseBtn.Parent = TitleBar
-    
-    CloseBtn.MouseButton1Click:Connect(function()
-        ScreenGui:Destroy()
-    end)
-    
-    -- Minimize button
-    local MinBtn = Instance.new("TextButton")
-    MinBtn.Size = UDim2.new(0, 30, 1, 0)
-    MinBtn.Position = UDim2.new(1, -70, 0, 0)
-    MinBtn.Text = "-"
-    MinBtn.Font = Enum.Font.GothamBold
-    MinBtn.TextSize = 14
-    MinBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    MinBtn.BackgroundTransparency = 1
-    MinBtn.Parent = TitleBar
-    
-    local minimized = false
-    MinBtn.MouseButton1Click:Connect(function()
-        minimized = not minimized
-        Main.Size = minimized and UDim2.new(0, 600, 0, 40) or UDim2.new(0, 600, 0, 400)
-    end)
-
-    
     -- Titlebar
     local TitleBar = Instance.new("Frame")
     TitleBar.Size = UDim2.new(1, 0, 0, 40)
     TitleBar.BackgroundColor3 = Color3.fromRGB(30, 34, 48)
     TitleBar.Parent = Main
     Instance.new("UICorner", TitleBar).CornerRadius = UDim.new(0, 10)
+    TitleBar.Active = true
+    TitleBar.Draggable = true
 
     local Title = Instance.new("TextLabel")
     Title.Size = UDim2.new(1, -10, 1, 0)
@@ -75,6 +40,37 @@ function Library:CreateWindow(title, subtitle)
     Title.TextXAlignment = Enum.TextXAlignment.Left
     Title.BackgroundTransparency = 1
     Title.Parent = TitleBar
+
+    -- Close button
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 30, 1, 0)
+    CloseBtn.Position = UDim2.new(1, -35, 0, 0)
+    CloseBtn.Text = "X"
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextSize = 14
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+    CloseBtn.BackgroundTransparency = 1
+    CloseBtn.Parent = TitleBar
+    CloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+
+    -- Minimize button
+    local MinBtn = Instance.new("TextButton")
+    MinBtn.Size = UDim2.new(0, 30, 1, 0)
+    MinBtn.Position = UDim2.new(1, -70, 0, 0)
+    MinBtn.Text = "-"
+    MinBtn.Font = Enum.Font.GothamBold
+    MinBtn.TextSize = 14
+    MinBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    MinBtn.BackgroundTransparency = 1
+    MinBtn.Parent = TitleBar
+
+    local minimized = false
+    MinBtn.MouseButton1Click:Connect(function()
+        minimized = not minimized
+        Main.Size = minimized and UDim2.new(0, 600, 0, 40) or UDim2.new(0, 600, 0, 400)
+    end)
 
     -- Sidebar
     local Sidebar = Instance.new("Frame")
@@ -108,7 +104,6 @@ function Library:CreateWindow(title, subtitle)
         Button.TextColor3 = Color3.fromRGB(220, 220, 220)
         Button.BackgroundColor3 = Color3.fromRGB(45, 49, 65)
         Button.Parent = Sidebar
-
         Instance.new("UICorner", Button).CornerRadius = UDim.new(0, 6)
 
         local TabPage = Instance.new("ScrollingFrame")
@@ -131,7 +126,6 @@ function Library:CreateWindow(title, subtitle)
         UIPadding.Parent = TabPage
 
         Tabs[tabName] = TabPage
-
         Button.MouseButton1Click:Connect(function()
             for _, t in pairs(Tabs) do t.Visible = false end
             TabPage.Visible = true
@@ -169,7 +163,6 @@ function Library:CreateWindow(title, subtitle)
             Btn.TextColor3 = Color3.fromRGB(230, 230, 230)
             Btn.BackgroundColor3 = Color3.fromRGB(50, 54, 70)
             Btn.Parent = TabPage
-
             Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
 
             Btn.MouseButton1Click:Connect(function()
@@ -248,7 +241,7 @@ function Library:CreateWindow(title, subtitle)
                 for _, option in ipairs(list) do
                     DropButton.Text = option
                     pcall(callback, option)
-                    break -- simple dropdown, pilih pertama saja
+                    break -- simple dropdown
                 end
             end)
         end
@@ -260,4 +253,3 @@ function Library:CreateWindow(title, subtitle)
 end
 
 return Library
-
