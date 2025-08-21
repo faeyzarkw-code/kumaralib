@@ -48,13 +48,16 @@ function Library:CreateWindow(title)
     ScreenGui.Name = "KumaraLibrary"
 
     -- Main Frame
-    local Main = Instance.new("Frame")
+    local Main = Instance.new("ImageLabel")
     Main.Size = UDim2.new(0, 600, 0, 400)
     Main.Position = UDim2.new(0.5, -300, 0.5, -200)
-    Main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-    Main.BackgroundTransparency = 0.15  -- 0 = solid, 1 = full transparan
-    Main.BorderSizePixel = 0
-    Main.Parent = game.CoreGui
+    Main.BackgroundTransparency = 1
+    Main.ImageColor3 = Color3.fromRGB(25, 25, 30) -- warna abu gelap
+    Main.ImageTransparency = 0.2 -- semi transparan (0 = solid, 1 = full transparan)
+    Main.Image = "rbxassetid://2790390993" -- plain square image biar transparansi smooth
+    Main.ScaleType = Enum.ScaleType.Slice
+    Main.SliceCenter = Rect.new(10,10,10,10)
+    Main.Parent = ScreenGui
     
     -- Rounded corner
     Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
@@ -120,4 +123,5 @@ function Library:CreateWindow(title)
 end
 
 return Library
+
 
