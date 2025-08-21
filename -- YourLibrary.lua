@@ -1,5 +1,4 @@
--- Kumara Hub (No White Dots)
-
+-- Kumara Hub dengan Sidebar Tab Fix
 local UIS = game:GetService("UserInputService")
 
 local function makeDraggable(gui, handle)
@@ -49,18 +48,6 @@ local function CreateWindow(title)
     Main.Parent = ScreenGui
     Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
 
-    -- Gradient (biar glassy, no dots)
-    local Gradient = Instance.new("UIGradient", Main)
-    Gradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255,255,255)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(180,180,180))
-    }
-    Gradient.Transparency = NumberSequence.new{
-        NumberSequenceKeypoint.new(0, 0.2),
-        NumberSequenceKeypoint.new(1, 0.4)
-    }
-    Gradient.Rotation = 90
-
     -- Stroke border
     local Stroke = Instance.new("UIStroke", Main)
     Stroke.Color = Color3.fromRGB(80, 80, 90)
@@ -73,7 +60,6 @@ local function CreateWindow(title)
     TitleBar.BackgroundTransparency = 0.15
     TitleBar.BorderSizePixel = 0
     TitleBar.Parent = Main
-    Instance.new("UICorner", TitleBar).CornerRadius = UDim.new(0, 12)
 
     local TitleTxt = Instance.new("TextLabel")
     TitleTxt.Size = UDim2.new(1, -40, 1, 0)
@@ -100,7 +86,7 @@ local function CreateWindow(title)
     Instance.new("UICorner", Close).CornerRadius = UDim.new(1, 0)
     Close.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
 
-    -- Sidebar
+    -- Sidebar (no corner!)
     local Sidebar = Instance.new("Frame")
     Sidebar.Size = UDim2.new(0, 180, 1, -40)
     Sidebar.Position = UDim2.new(0, 0, 0, 40)
@@ -108,9 +94,8 @@ local function CreateWindow(title)
     Sidebar.BackgroundTransparency = 0.2
     Sidebar.BorderSizePixel = 0
     Sidebar.Parent = Main
-    Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 12)
 
-    -- Content
+    -- Content (no corner!)
     local Content = Instance.new("Frame")
     Content.Size = UDim2.new(1, -180, 1, -40)
     Content.Position = UDim2.new(0, 180, 0, 40)
@@ -118,9 +103,8 @@ local function CreateWindow(title)
     Content.BackgroundTransparency = 0.2
     Content.BorderSizePixel = 0
     Content.Parent = Main
-    Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 12)
 
-    -- Text sample
+    -- Label sample
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(1, -20, 1, -20)
     Label.Position = UDim2.new(0, 10, 0, 10)
@@ -133,10 +117,60 @@ local function CreateWindow(title)
     Label.TextYAlignment = Enum.TextYAlignment.Top
     Label.Parent = Content
 
+    -- Sidebar button
+    local function addTab(name, callback)
+        local Btn = Instance.new("TextButton")
+        Btn.Size = UDim2.new(1, -20, 0, 35)
+        Btn.Position = UDim2.new(0, 10, 0, (#Sidebar:GetChildren()-1)*40 + 10)
+        Btn.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
+        Btn.BackgroundTransparency = 0.1
+        Btn.Text = name
+        Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Btn.Font = Enum.Font.Gotham
+        Btn.TextSize = 14
+        Btn.Parent = Sidebar
+        Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
+        Btn.MouseButton1Click:Connect(function()
+            callback(Content)
+        end)
+    end
+
+    -- Tambahin tab contoh
+    addTab("Automation", function(content)
+        for _, v in ipairs(content:GetChildren()) do
+            if v:IsA("GuiObject") then v:Destroy() end
+        end
+        local lbl = Instance.new("TextLabel", content)
+        lbl.Size = UDim2.new(1, -20, 1, -20)
+        lbl.Position = UDim2.new(0, 10, 0, 10)
+        lbl.BackgroundTransparency = 1
+        lbl.Text = "Menu: Automation"
+        lbl.TextColor3 = Color3.fromRGB(220,220,220)
+        lbl.Font = Enum.Font.Gotham
+        lbl.TextSize = 16
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+        lbl.TextYAlignment = Enum.TextYAlignment.Top
+    end)
+
+    addTab("Settings", function(content)
+        for _, v in ipairs(content:GetChildren()) do
+            if v:IsA("GuiObject") then v:Destroy() end
+        end
+        local lbl = Instance.new("TextLabel", content)
+        lbl.Size = UDim2.new(1, -20, 1, -20)
+        lbl.Position = UDim2.new(0, 10, 0, 10)
+        lbl.BackgroundTransparency = 1
+        lbl.Text = "Menu: Settings"
+        lbl.TextColor3 = Color3.fromRGB(220,220,220)
+        lbl.Font = Enum.Font.Gotham
+        lbl.TextSize = 16
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+        lbl.TextYAlignment = Enum.TextYAlignment.Top
+    end)
+
     makeDraggable(Main, TitleBar)
 
     return Main, Sidebar, Content
 end
 
--- panggil
 CreateWindow("Kumara Hub")
