@@ -47,16 +47,13 @@ function Library:CreateWindow(title)
     ScreenGui.IgnoreGuiInset = true
     ScreenGui.Name = "KumaraLibrary"
 
-    -- Main Frame
-    local Main = Instance.new("ImageLabel")
+   -- Main Frame
+    local Main = Instance.new("Frame")
     Main.Size = UDim2.new(0, 600, 0, 400)
     Main.Position = UDim2.new(0.5, -300, 0.5, -200)
-    Main.BackgroundTransparency = 1
-    Main.ImageColor3 = Color3.fromRGB(25, 25, 30) -- warna abu gelap
-    Main.ImageTransparency = 0.2 -- semi transparan (0 = solid, 1 = full transparan)
-    Main.Image = "rbxassetid://2790390993" -- plain square image biar transparansi smooth
-    Main.ScaleType = Enum.ScaleType.Slice
-    Main.SliceCenter = Rect.new(10,10,10,10)
+    Main.BackgroundColor3 = Color3.fromRGB(25, 25, 30) -- abu gelap
+    Main.BackgroundTransparency = 0.15 -- agak transparan
+    Main.BorderSizePixel = 0
     Main.Parent = ScreenGui
     
     -- Rounded corner
@@ -65,8 +62,18 @@ function Library:CreateWindow(title)
     -- Stroke pinggiran
     local stroke = Instance.new("UIStroke")
     stroke.Color = Color3.fromRGB(80, 80, 90)
-    stroke.Thickness = 1.5
+    stroke.Thickness = 1.2
     stroke.Parent = Main
+    
+    -- Blur background (biar ada efek blur kayak Voidware)
+    local blur = Instance.new("ImageLabel")
+    blur.Size = UDim2.new(1, 0, 1, 0)
+    blur.BackgroundTransparency = 1
+    blur.Image = "rbxassetid://8992230677" -- texture blur halus
+    blur.ImageTransparency = 0.7
+    blur.ScaleType = Enum.ScaleType.Tile
+    blur.TileSize = UDim2.new(0, 200, 0, 200)
+    blur.Parent = Main
 
     -- Title Bar
     local TitleBar = Instance.new("Frame")
@@ -123,5 +130,6 @@ function Library:CreateWindow(title)
 end
 
 return Library
+
 
 
