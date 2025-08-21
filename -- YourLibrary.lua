@@ -119,19 +119,6 @@ function Library:CreateWindow(title, version)
         end
     end)
 
-    -- Version
-    local Version = Instance.new("TextLabel")
-    Version.Size = UDim2.new(0, 90, 1, 0)
-    Version.Position = UDim2.new(1, -95, 0, 0)
-    Version.BackgroundTransparency = 1
-    Version.Text = version or "v1.0.0"
-    Version.TextColor3 = Color3.fromRGB(170, 170, 170)
-    Version.Font = Enum.Font.Gotham
-    Version.TextSize = 12
-    Version.TextXAlignment = Enum.TextXAlignment.Right
-    Version.Parent = TitleBar
-    Version.ZIndex = 2
-
     -- Sidebar
     local Sidebar = Instance.new("Frame")
     Sidebar.Size = UDim2.new(0, 170, 1, -40)
@@ -217,5 +204,6 @@ function Library:CreateWindow(title, version)
 end
 
 return Library
+
 
 
