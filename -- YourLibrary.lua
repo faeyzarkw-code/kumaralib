@@ -302,24 +302,12 @@ createSidebarButton("Auto Buy", function()
 
 createButton(Content, "Open Unlock Box", function()
     task.spawn(function()
-        -- tungguin sampai prompt ada
-        local prompt
-        repeat
-            prompt = workspace:FindFirstChild("Event") 
-                     and workspace.Event:FindFirstChild("Unlock Box") 
-                     and workspace.Event["Unlock Box"]:FindFirstChild("OpenKeyMaster")
-            task.wait(0.2)
-        until prompt
-
-        -- begitu udah ketemu, langsung fire sekali
+        local prompt = workspace:WaitForChild("Event"):WaitForChild("Unlock Box"):WaitForChild("OpenKeyMaster")
         pcall(function()
             fireproximityprompt(prompt)
         end)
     end)
 end)
-
-
-
 end)
 
 
