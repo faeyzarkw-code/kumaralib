@@ -232,7 +232,11 @@ local function createButton(parent, text, callback)
     button.BorderSizePixel = 0
     button.BackgroundTransparency = 0.1
     button.TextXAlignment = Enum.TextXAlignment.Left
-    button.Padding = UDim.new(0, 10)
+    
+    -- biar ada padding kiri
+    local padding = Instance.new("UIPadding")
+    padding.Parent = button
+    padding.PaddingLeft = UDim.new(0, 10)
 
     -- icon di kanan
     local icon = Instance.new("ImageLabel")
@@ -240,6 +244,7 @@ local function createButton(parent, text, callback)
     icon.AnchorPoint = Vector2.new(1, 0.5)
     icon.Position = UDim2.new(1, -10, 0.5, 0)
     icon.Size = UDim2.new(0, 20, 0, 20)
+    icon.BackgroundTransparency = 1
     icon.Image = "rbxassetid://7072706625" -- contoh icon, bisa diganti
 
     -- action kalau di klik
@@ -249,6 +254,7 @@ local function createButton(parent, text, callback)
 
     return button
 end
+
 
 
 
