@@ -204,6 +204,57 @@ function Library:CreateWindow(title, version)
         label.Parent = Content
     end)
 
+    -- Variabel auto buy
+    local autoBuy = false
+    
+    -- GUI Farming Tab
+    local FarmingBtn = Instance.new("TextButton")
+    FarmingBtn.Size = UDim2.new(0, 120, 0, 35)
+    FarmingBtn.Position = UDim2.new(0, 10, 0, 60)
+    FarmingBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    FarmingBtn.Text = "Auto Buy: OFF"
+    FarmingBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    FarmingBtn.Font = Enum.Font.GothamBold
+    FarmingBtn.TextSize = 14
+    FarmingBtn.Parent = Main
+    Instance.new("UICorner", FarmingBtn).CornerRadius = UDim.new(0, 6)
+    
+    -- RemoteEvent
+    local RS = game:GetService("ReplicatedStorage")
+    local EventShop = RS.NetworkContainer.RemoteEvents.EventShop
+    local boxes = {"Common Box", "Rare Box", "Epic Box", "Legendary Box"}
+    
+    -- Toggle ketika diklik
+    FarmingBtn.MouseButton1Click:Connect(function()
+    	autoBuy = not autoBuy
+    	if autoBuy then
+    		FarmingBtn.Text = "Auto Buy: ON"
+    		FarmingBtn.BackgroundColor3 = Color3.fromRGB(60, 200, 100) -- hijau
+    	else
+    		FarmingBtn.Text = "Auto Buy: OFF"
+    		FarmingBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60) -- merah
+    	end
+    end)
+    
+    -- Loop Auto Buy
+    task.spawn(function()
+    	while true do
+    		if autoBuy then
+    			for _, box in ipairs(boxes) do
+    				for i = 1, 4 do
+    					EventShop:FireServer(box)
+    					print(">> Membeli:", box, "ke-", i)
+    					task.wait(0.2)
+    				end
+    			end
+    			print("✅ Selesai beli semua box, tunggu 2 menit...")
+    			task.wait(120)
+    		else
+    			task.wait(1) -- idle, biar ga makan resource
+    		end
+    	end
+    end)
+    
     -- drag
     makeDraggable(Main, TitleBar)
 
@@ -215,6 +266,7 @@ function Library:CreateWindow(title, version)
 end
 
 return Library
+
 
 
 
