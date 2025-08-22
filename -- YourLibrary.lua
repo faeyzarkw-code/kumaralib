@@ -128,7 +128,24 @@ function Library:CreateWindow(title, version)
     list.SortOrder = Enum.SortOrder.LayoutOrder
     list.Padding = UDim.new(0, 5)
     
-local function createCard(parent, title, desc)
+    -- Content
+    local Content = Instance.new("Frame")
+    Content.Size = UDim2.new(1, -170, 1, -40)
+    Content.Position = UDim2.new(0, 170, 0, 40)
+    Content.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+    Content.BorderSizePixel = 0
+    Content.ClipsDescendants = true
+    Content.Parent = Main
+    Content.ZIndex = 1
+    Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Parent = Content
+    stroke.Color = Color3.fromRGB(50, 100, 200)
+    stroke.Thickness = 1
+    stroke.Transparency = 0.4
+
+    local function createCard(parent, title, desc)
     local Card = Instance.new("Frame", parent)
     Card.Size = UDim2.new(1, -20, 0, 120)
     Card.Position = UDim2.new(0, 10, 0, 10)
