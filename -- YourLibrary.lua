@@ -302,12 +302,25 @@ createSidebarButton("Auto Buy", function()
 
 createButton(Content, "Open Unlock Box", function()
     task.spawn(function()
-        local prompt = workspace:WaitForChild("Event"):WaitForChild("Unlock Box"):WaitForChild("OpenKeyMaster")
-        pcall(function()
-            fireproximityprompt(prompt)
-        end)
+        local prompt
+        for i = 1, 20 do -- coba maksimal 20x (2 detik total)
+            prompt = workspace:FindFirstChild("Event") 
+                     and workspace.Event:FindFirstChild("Unlock Box") 
+                     and workspace.Event["Unlock Box"]:FindFirstChild("OpenKeyMaster")
+            if prompt then break end
+            task.wait(0.1)
+        end
+
+        if prompt then
+            pcall(function()
+                fireproximityprompt(prompt)
+            end)
+        else
+            warn("⚠️ Prompt Unlock Box ga ketemu setelah 2 detik.")
+        end
     end)
 end)
+
 end)
 
 
