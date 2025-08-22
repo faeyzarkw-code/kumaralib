@@ -262,54 +262,16 @@ createSidebarButton("Auto Buy", function()
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     UIListLayout.Parent = Content
 
-    -- fungsi bikin row setting
-    local function createToggle(text, default, callback)
-        local Frame = Instance.new("Frame")
-        Frame.Size = UDim2.new(0.9, 0, 0, 50)
-        Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        Frame.Parent = Content
-        Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
-
-        local Label = Instance.new("TextLabel")
-        Label.Size = UDim2.new(1, -60, 1, 0)
-        Label.Position = UDim2.new(0, 10, 0, 0)
-        Label.BackgroundTransparency = 1
-        Label.Text = text
-        Label.TextColor3 = Color3.fromRGB(255,255,255)
-        Label.Font = Enum.Font.Gotham
-        Label.TextSize = 16
-        Label.TextXAlignment = Enum.TextXAlignment.Left
-        Label.Parent = Frame
-
-        local Toggle = Instance.new("TextButton")
-        Toggle.Size = UDim2.new(0, 40, 0, 40)
-        Toggle.Position = UDim2.new(1, -50, 0.5, -20)
-        Toggle.BackgroundColor3 = default and Color3.fromRGB(60,200,100) or Color3.fromRGB(200,60,60)
-        Toggle.Text = ""
-        Toggle.Parent = Frame
-        Instance.new("UICorner", Toggle).CornerRadius = UDim.new(1, 0)
-
-        local enabled = default
-        Toggle.MouseButton1Click:Connect(function()
-            enabled = not enabled
-            if enabled then
-                Toggle.BackgroundColor3 = Color3.fromRGB(60,200,100)
-            else
-                Toggle.BackgroundColor3 = Color3.fromRGB(200,60,60)
-            end
-            if callback then callback(enabled) end
-        end)
-    end
-
-    -- contoh toggle di Auto Buy
-    createToggle("Auto Buy Event Box", false, function(state)
+    -- panggil toggle switch gaya Voidware
+    createToggle(Content, "Auto Buy Event Box", function(state)
         autoBuy = state
     end)
 
-    createToggle("Auto Sell Junk", false, function(state)
+    createToggle(Content, "Auto Sell Junk", function(state)
         autoSell = state
     end)
 end)
+
 
 
     -- Loop Auto Buy
