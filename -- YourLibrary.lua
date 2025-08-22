@@ -251,45 +251,66 @@ end
     local boxes = {"Common Box", "Rare Box", "Epic Box", "Legendary Box"}
     local autoBuy = false
 
-    -- Auto Buy tab di sidebar
-    createSidebarButton("Auto Buy", function()
-        Content:ClearAllChildren()
-        
-        -- judul
-        local TitleLabel = Instance.new("TextLabel")
-        TitleLabel.Size = UDim2.new(1, 0, 0, 40)
-        TitleLabel.Position = UDim2.new(0, 10, 0, 10)
-        TitleLabel.BackgroundTransparency = 1
-        TitleLabel.Text = "Auto Buy Event Box"
-        TitleLabel.TextColor3 = Color3.fromRGB(255,255,255)
-        TitleLabel.Font = Enum.Font.GothamBold
-        TitleLabel.TextSize = 18
-        TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        TitleLabel.Parent = Content
+-- Auto Buy tab di sidebar
+createSidebarButton("Auto Buy", function()
+    Content:ClearAllChildren()
 
-        -- tombol toggle
-        local ToggleBtn = Instance.new("TextButton")
-        ToggleBtn.Size = UDim2.new(0, 200, 0, 50)
-        ToggleBtn.Position = UDim2.new(0, 20, 0, 60)
-        ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
-        ToggleBtn.Text = "Auto Buy: OFF"
-        ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        ToggleBtn.Font = Enum.Font.GothamBold
-        ToggleBtn.TextSize = 18
-        ToggleBtn.Parent = Content
-        Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(0, 8)
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.Padding = UDim.new(0, 10)
+    UIListLayout.FillDirection = Enum.FillDirection.Vertical
+    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Parent = Content
 
-        ToggleBtn.MouseButton1Click:Connect(function()
-            autoBuy = not autoBuy
-            if autoBuy then
-                ToggleBtn.Text = "Auto Buy: ON"
-                ToggleBtn.BackgroundColor3 = Color3.fromRGB(60, 200, 100)
+    -- fungsi bikin row setting
+    local function createToggle(text, default, callback)
+        local Frame = Instance.new("Frame")
+        Frame.Size = UDim2.new(0.9, 0, 0, 50)
+        Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        Frame.Parent = Content
+        Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
+
+        local Label = Instance.new("TextLabel")
+        Label.Size = UDim2.new(1, -60, 1, 0)
+        Label.Position = UDim2.new(0, 10, 0, 0)
+        Label.BackgroundTransparency = 1
+        Label.Text = text
+        Label.TextColor3 = Color3.fromRGB(255,255,255)
+        Label.Font = Enum.Font.Gotham
+        Label.TextSize = 16
+        Label.TextXAlignment = Enum.TextXAlignment.Left
+        Label.Parent = Frame
+
+        local Toggle = Instance.new("TextButton")
+        Toggle.Size = UDim2.new(0, 40, 0, 40)
+        Toggle.Position = UDim2.new(1, -50, 0.5, -20)
+        Toggle.BackgroundColor3 = default and Color3.fromRGB(60,200,100) or Color3.fromRGB(200,60,60)
+        Toggle.Text = ""
+        Toggle.Parent = Frame
+        Instance.new("UICorner", Toggle).CornerRadius = UDim.new(1, 0)
+
+        local enabled = default
+        Toggle.MouseButton1Click:Connect(function()
+            enabled = not enabled
+            if enabled then
+                Toggle.BackgroundColor3 = Color3.fromRGB(60,200,100)
             else
-                ToggleBtn.Text = "Auto Buy: OFF"
-                ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+                Toggle.BackgroundColor3 = Color3.fromRGB(200,60,60)
             end
+            if callback then callback(enabled) end
         end)
+    end
+
+    -- contoh toggle di Auto Buy
+    createToggle("Auto Buy Event Box", false, function(state)
+        autoBuy = state
     end)
+
+    createToggle("Auto Sell Junk", false, function(state)
+        autoSell = state
+    end)
+end)
+
 
     -- Loop Auto Buy
     task.spawn(function()
