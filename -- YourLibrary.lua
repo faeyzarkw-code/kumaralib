@@ -204,56 +204,91 @@ function Library:CreateWindow(title, version)
         label.Parent = Content
     end)
 
-    -- Variabel auto buy
-    local autoBuy = false
-    
-    -- GUI Farming Tab
-    local FarmingBtn = Instance.new("TextButton")
-    FarmingBtn.Size = UDim2.new(0, 120, 0, 35)
-    FarmingBtn.Position = UDim2.new(0, 10, 0, 60)
-    FarmingBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    FarmingBtn.Text = "Auto Buy: OFF"
-    FarmingBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    FarmingBtn.Font = Enum.Font.GothamBold
-    FarmingBtn.TextSize = 14
-    FarmingBtn.Parent = Main
-    Instance.new("UICorner", FarmingBtn).CornerRadius = UDim.new(0, 6)
-    
-    -- RemoteEvent
     local RS = game:GetService("ReplicatedStorage")
-    local EventShop = RS.NetworkContainer.RemoteEvents.EventShop
-    local boxes = {"Common Box", "Rare Box", "Epic Box", "Legendary Box"}
-    
-    -- Toggle ketika diklik
-    FarmingBtn.MouseButton1Click:Connect(function()
-    	autoBuy = not autoBuy
-    	if autoBuy then
-    		FarmingBtn.Text = "Auto Buy: ON"
-    		FarmingBtn.BackgroundColor3 = Color3.fromRGB(60, 200, 100) -- hijau
-    	else
-    		FarmingBtn.Text = "Auto Buy: OFF"
-    		FarmingBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60) -- merah
-    	end
-    end)
-    
-    -- Loop Auto Buy
-    task.spawn(function()
-    	while true do
-    		if autoBuy then
-    			for _, box in ipairs(boxes) do
-    				for i = 1, 4 do
-    					EventShop:FireServer(box)
-    					print(">> Membeli:", box, "ke-", i)
-    					task.wait(0.2)
-    				end
-    			end
-    			print("✅ Selesai beli semua box, tunggu 2 menit...")
-    			task.wait(120)
-    		else
-    			task.wait(1) -- idle, biar ga makan resource
-    		end
-    	end
-    end)
+local EventShop = RS.NetworkContainer.RemoteEvents.EventShop
+local boxes = {"Common Box", "Rare Box", "Epic Box", "Legendary Box"}
+
+local autoBuy = false
+
+-- Content Area (Panel Kanan)
+local Content = Instance.new("Frame")
+Content.Size = UDim2.new(1, -150, 1, -40)
+Content.Position = UDim2.new(0, 150, 0, 40)
+Content.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+Content.BorderSizePixel = 0
+Content.Parent = Main
+Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
+
+-- === Tombol Sidebar: Auto Buy ===
+local AutoBuyTabBtn = Instance.new("TextButton")
+AutoBuyTabBtn.Size = UDim2.new(0, 120, 0, 35)
+AutoBuyTabBtn.Position = UDim2.new(0, 10, 0, 100)
+AutoBuyTabBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+AutoBuyTabBtn.Text = "Auto Buy"
+AutoBuyTabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+AutoBuyTabBtn.Font = Enum.Font.GothamBold
+AutoBuyTabBtn.TextSize = 14
+AutoBuyTabBtn.Parent = Main
+Instance.new("UICorner", AutoBuyTabBtn).CornerRadius = UDim.new(0, 6)
+
+-- === Panel Konten Auto Buy ===
+local AutoBuyContent = Instance.new("Frame")
+AutoBuyContent.Size = UDim2.new(1, 0, 1, 0)
+AutoBuyContent.BackgroundTransparency = 1
+AutoBuyContent.Visible = false
+AutoBuyContent.Parent = Content
+
+-- Tombol Toggle ON/OFF
+local ToggleBtn = Instance.new("TextButton")
+ToggleBtn.Size = UDim2.new(0, 200, 0, 50)
+ToggleBtn.Position = UDim2.new(0, 20, 0, 20)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+ToggleBtn.Text = "Auto Buy: OFF"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.TextSize = 18
+ToggleBtn.Parent = AutoBuyContent
+Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(0, 8)
+
+-- Kalau klik tab Auto Buy di sidebar
+AutoBuyTabBtn.MouseButton1Click:Connect(function()
+    for _, child in ipairs(Content:GetChildren()) do
+        child.Visible = false
+    end
+    AutoBuyContent.Visible = true
+end)
+
+-- Kalau klik toggle
+ToggleBtn.MouseButton1Click:Connect(function()
+    autoBuy = not autoBuy
+    if autoBuy then
+        ToggleBtn.Text = "Auto Buy: ON"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(60, 200, 100) -- hijau
+    else
+        ToggleBtn.Text = "Auto Buy: OFF"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60) -- merah
+    end
+end)
+
+-- Loop Auto Buy
+task.spawn(function()
+    while true do
+        if autoBuy then
+            for _, box in ipairs(boxes) do
+                for i = 1, 4 do
+                    EventShop:FireServer(box)
+                    print(">> Membeli:", box, "ke-", i)
+                    task.wait(0.2)
+                end
+            end
+            print("✅ Selesai beli semua box, tunggu 2 menit...")
+            task.wait(120)
+        else
+            task.wait(1)
+        end
+    end
+end)
+
     
     -- drag
     makeDraggable(Main, TitleBar)
@@ -266,6 +301,7 @@ function Library:CreateWindow(title, version)
 end
 
 return Library
+
 
 
 
