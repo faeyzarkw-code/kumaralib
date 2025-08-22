@@ -106,16 +106,7 @@ function Library:CreateWindow(title, version)
     MinBtn.Parent = TitleBar
     Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
     
-    -- Status minimize
-    local isMinimized = false
-    
-    -- Tween configs
-    local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-    local tweenMinimize = TweenService:Create(Main, tweenInfo, { Size = UDim2.new(0, 650, 0, 40) })
-    local tweenRestore = TweenService:Create(Main, tweenInfo, { Size = UDim2.new(0, 650, 0, 420) })
-
-    
-    -- Sidebar (taruh ini dulu baru bikin fungsi minimize)
+    -- Sidebar
     local Sidebar = Instance.new("Frame")
     Sidebar.Size = UDim2.new(0, 170, 1, -40)
     Sidebar.Position = UDim2.new(0, 0, 0, 40)
@@ -138,22 +129,6 @@ function Library:CreateWindow(title, version)
     Content.ZIndex = 1
     Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
     
-    -- Baru tambahin fungsi minimize setelah Sidebar & Content ada
-    local minimized = false
-    MinBtn.MouseButton1Click:Connect(function()
-        minimized = not minimized
-        if minimized then
-            Sidebar.Visible = false
-            Content.Visible = false
-            Main.Size = UDim2.new(0, 250, 0, 40) -- shrink biar cuma titlebar
-        else
-            Sidebar.Visible = true
-            Content.Visible = true
-            Main.Size = UDim2.new(0, 650, 0, 420) -- balikin ukuran normal
-        end
-    end)
-
-
     -- fungsi buat tombol sidebar
     local function createSidebarButton(name, callback)
         local btn = Instance.new("TextButton")
@@ -165,7 +140,6 @@ function Library:CreateWindow(title, version)
         btn.TextSize = 14
         btn.TextXAlignment = Enum.TextXAlignment.Left
         btn.Parent = Sidebar
-        btn.LayoutOrder = #Sidebar:GetChildren()  -- << ini buat urut
 
         btn.MouseEnter:Connect(function()
             TweenService:Create(btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255,255,255)}):Play()
@@ -180,7 +154,7 @@ function Library:CreateWindow(title, version)
     end
 
     -- contoh isi sidebar
-    local HomeBtn = createSidebarButton("Home", function()
+    createSidebarButton("Home", function()
         Content:ClearAllChildren()
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1,0,1,0)
@@ -192,7 +166,7 @@ function Library:CreateWindow(title, version)
         label.Parent = Content
     end)
 
-    local FarmingBtn = createSidebarButton("Farming", function()
+    createSidebarButton("Farming", function()
         Content:ClearAllChildren()
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1,0,1,0)
@@ -204,92 +178,71 @@ function Library:CreateWindow(title, version)
         label.Parent = Content
     end)
 
+    -- Auto Buy logic
     local RS = game:GetService("ReplicatedStorage")
-local EventShop = RS.NetworkContainer.RemoteEvents.EventShop
-local boxes = {"Common Box", "Rare Box", "Epic Box", "Legendary Box"}
+    local EventShop = RS.NetworkContainer.RemoteEvents.EventShop
+    local boxes = {"Common Box", "Rare Box", "Epic Box", "Legendary Box"}
+    local autoBuy = false
 
-local autoBuy = false
+    -- Auto Buy tab di sidebar
+    createSidebarButton("Auto Buy", function()
+        Content:ClearAllChildren()
+        
+        -- judul
+        local TitleLabel = Instance.new("TextLabel")
+        TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+        TitleLabel.Position = UDim2.new(0, 10, 0, 10)
+        TitleLabel.BackgroundTransparency = 1
+        TitleLabel.Text = "Auto Buy Event Box"
+        TitleLabel.TextColor3 = Color3.fromRGB(255,255,255)
+        TitleLabel.Font = Enum.Font.GothamBold
+        TitleLabel.TextSize = 18
+        TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+        TitleLabel.Parent = Content
 
--- Content Area (Panel Kanan)
-local Content = Instance.new("Frame")
-Content.Size = UDim2.new(1, -150, 1, -40)
-Content.Position = UDim2.new(0, 150, 0, 40)
-Content.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-Content.BorderSizePixel = 0
-Content.Parent = Main
-Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
-
--- === Tombol Sidebar: Auto Buy ===
-local AutoBuyTabBtn = Instance.new("TextButton")
-AutoBuyTabBtn.Size = UDim2.new(0, 120, 0, 35)
-AutoBuyTabBtn.Position = UDim2.new(0, 10, 0, 100)
-AutoBuyTabBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-AutoBuyTabBtn.Text = "Auto Buy"
-AutoBuyTabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-AutoBuyTabBtn.Font = Enum.Font.GothamBold
-AutoBuyTabBtn.TextSize = 14
-AutoBuyTabBtn.Parent = Main
-Instance.new("UICorner", AutoBuyTabBtn).CornerRadius = UDim.new(0, 6)
-
--- === Panel Konten Auto Buy ===
-local AutoBuyContent = Instance.new("Frame")
-AutoBuyContent.Size = UDim2.new(1, 0, 1, 0)
-AutoBuyContent.BackgroundTransparency = 1
-AutoBuyContent.Visible = false
-AutoBuyContent.Parent = Content
-
--- Tombol Toggle ON/OFF
-local ToggleBtn = Instance.new("TextButton")
-ToggleBtn.Size = UDim2.new(0, 200, 0, 50)
-ToggleBtn.Position = UDim2.new(0, 20, 0, 20)
-ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
-ToggleBtn.Text = "Auto Buy: OFF"
-ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ToggleBtn.Font = Enum.Font.GothamBold
-ToggleBtn.TextSize = 18
-ToggleBtn.Parent = AutoBuyContent
-Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(0, 8)
-
--- Kalau klik tab Auto Buy di sidebar
-AutoBuyTabBtn.MouseButton1Click:Connect(function()
-    for _, child in ipairs(Content:GetChildren()) do
-        child.Visible = false
-    end
-    AutoBuyContent.Visible = true
-end)
-
--- Kalau klik toggle
-ToggleBtn.MouseButton1Click:Connect(function()
-    autoBuy = not autoBuy
-    if autoBuy then
-        ToggleBtn.Text = "Auto Buy: ON"
-        ToggleBtn.BackgroundColor3 = Color3.fromRGB(60, 200, 100) -- hijau
-    else
+        -- tombol toggle
+        local ToggleBtn = Instance.new("TextButton")
+        ToggleBtn.Size = UDim2.new(0, 200, 0, 50)
+        ToggleBtn.Position = UDim2.new(0, 20, 0, 60)
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
         ToggleBtn.Text = "Auto Buy: OFF"
-        ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60) -- merah
-    end
-end)
+        ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        ToggleBtn.Font = Enum.Font.GothamBold
+        ToggleBtn.TextSize = 18
+        ToggleBtn.Parent = Content
+        Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(0, 8)
 
--- Loop Auto Buy
-task.spawn(function()
-    while true do
-        if autoBuy then
-            for _, box in ipairs(boxes) do
-                for i = 1, 4 do
-                    EventShop:FireServer(box)
-                    print(">> Membeli:", box, "ke-", i)
-                    task.wait(0.2)
-                end
+        ToggleBtn.MouseButton1Click:Connect(function()
+            autoBuy = not autoBuy
+            if autoBuy then
+                ToggleBtn.Text = "Auto Buy: ON"
+                ToggleBtn.BackgroundColor3 = Color3.fromRGB(60, 200, 100)
+            else
+                ToggleBtn.Text = "Auto Buy: OFF"
+                ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
             end
-            print("✅ Selesai beli semua box, tunggu 2 menit...")
-            task.wait(120)
-        else
-            task.wait(1)
-        end
-    end
-end)
+        end)
+    end)
 
-    
+    -- Loop Auto Buy
+    task.spawn(function()
+        while true do
+            if autoBuy then
+                for _, box in ipairs(boxes) do
+                    for i = 1, 4 do
+                        EventShop:FireServer(box)
+                        print(">> Membeli:", box, "ke-", i)
+                        task.wait(0.2)
+                    end
+                end
+                print("✅ Selesai beli semua box, tunggu 2 menit...")
+                task.wait(120)
+            else
+                task.wait(1)
+            end
+        end
+    end)
+
     -- drag
     makeDraggable(Main, TitleBar)
 
@@ -301,12 +254,3 @@ end)
 end
 
 return Library
-
-
-
-
-
-
-
-
-
