@@ -108,6 +108,12 @@ function Library:CreateWindow(title, version)
     MinBtn.Parent = TitleBar
     CloseBtn.TextScaled = true
     CloseBtn.AutoButtonColor = true
+
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    local padding = Instance.new("UIPadding")
+    padding.Parent = btn
+    padding.PaddingLeft = UDim.new(0, 15)
+
     
     -- Sidebar
     local Sidebar = Instance.new("Frame")
