@@ -129,29 +129,96 @@ function Library:CreateWindow(title, version)
     Content.ZIndex = 1
     Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
     
-    -- fungsi buat tombol sidebar
-    local function createSidebarButton(name, callback)
-        local btn = Instance.new("TextButton")
-        btn.Size = UDim2.new(1, -10, 0, 30)
-        btn.BackgroundTransparency = 1
-        btn.Text = name
-        btn.Font = Enum.Font.Gotham
-        btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-        btn.TextSize = 14
-        btn.TextXAlignment = Enum.TextXAlignment.Left
-        btn.Parent = Sidebar
+-- fungsi buat tombol sidebar dengan highlight
+local ActiveTab
+local function createSidebarButton(name, callback)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -10, 0, 35)
+    btn.BackgroundColor3 = Color3.fromRGB(25,25,30)
+    btn.Text = name
+    btn.Font = Enum.Font.GothamBold
+    btn.TextColor3 = Color3.fromRGB(200,200,200)
+    btn.TextSize = 14
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Parent = Sidebar
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0,6)
 
-        btn.MouseEnter:Connect(function()
-            TweenService:Create(btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255,255,255)}):Play()
-        end)
-        btn.MouseLeave:Connect(function()
-            TweenService:Create(btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(200,200,200)}):Play()
-        end)
+    btn.MouseButton1Click:Connect(function()
+        if ActiveTab then
+            TweenService:Create(ActiveTab, TweenInfo.new(0.2), {
+                BackgroundColor3 = Color3.fromRGB(25,25,30),
+                TextColor3 = Color3.fromRGB(200,200,200)
+            }):Play()
+        end
+        ActiveTab = btn
+        TweenService:Create(btn, TweenInfo.new(0.25), {
+            BackgroundColor3 = Color3.fromRGB(60,120,200),
+            TextColor3 = Color3.fromRGB(255,255,255)
+        }):Play()
+        callback()
+    end)
 
-        btn.MouseButton1Click:Connect(callback)
+    return btn
+end
 
-        return btn
+-- fungsi buat tombol toggle gaya Voidware
+local function createToggle(parent, text, callback)
+    local Holder = Instance.new("Frame", parent)
+    Holder.Size = UDim2.new(1,-20,0,40)
+    Holder.Position = UDim2.new(0,10,0,0)
+    Holder.BackgroundTransparency = 1
+
+    local Label = Instance.new("TextLabel", Holder)
+    Label.Size = UDim2.new(1,-60,1,0)
+    Label.BackgroundTransparency = 1
+    Label.Text = text
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 14
+    Label.TextColor3 = Color3.fromRGB(230,230,230)
+
+    local ToggleBtn = Instance.new("Frame", Holder)
+    ToggleBtn.Size = UDim2.new(0,45,0,22)
+    ToggleBtn.Position = UDim2.new(1,-50,0.5,-11)
+    ToggleBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(1,0)
+
+    local Knob = Instance.new("Frame", ToggleBtn)
+    Knob.Size = UDim2.new(0,18,0,18)
+    Knob.Position = UDim2.new(0,2,0.5,-9)
+    Knob.BackgroundColor3 = Color3.fromRGB(200,200,200)
+    Instance.new("UICorner", Knob).CornerRadius = UDim.new(1,0)
+
+    local State = false
+    local function setToggle(newState)
+        State = newState
+        if State then
+            TweenService:Create(ToggleBtn, TweenInfo.new(0.25), {
+                BackgroundColor3 = Color3.fromRGB(60,200,120)
+            }):Play()
+            TweenService:Create(Knob, TweenInfo.new(0.25), {
+                Position = UDim2.new(1,-20,0.5,-9),
+                BackgroundColor3 = Color3.fromRGB(255,255,255)
+            }):Play()
+        else
+            TweenService:Create(ToggleBtn, TweenInfo.new(0.25), {
+                BackgroundColor3 = Color3.fromRGB(60,60,60)
+            }):Play()
+            TweenService:Create(Knob, TweenInfo.new(0.25), {
+                Position = UDim2.new(0,2,0.5,-9),
+                BackgroundColor3 = Color3.fromRGB(200,200,200)
+            }):Play()
+        end
+        callback(State)
     end
+
+    ToggleBtn.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            setToggle(not State)
+        end
+    end)
+end
+
 
     -- contoh isi sidebar
     createSidebarButton("Home", function()
@@ -254,3 +321,4 @@ function Library:CreateWindow(title, version)
 end
 
 return Library
+
