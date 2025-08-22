@@ -128,54 +128,91 @@ function Library:CreateWindow(title, version)
     list.SortOrder = Enum.SortOrder.LayoutOrder
     list.Padding = UDim.new(0, 5)
     
-    -- Content
-    local Content = Instance.new("Frame")
-    Content.Size = UDim2.new(1, -170, 1, -40)
-    Content.Position = UDim2.new(0, 170, 0, 40)
-    Content.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
-    Content.BorderSizePixel = 0
-    Content.ClipsDescendants = true
-    Content.Parent = Main
-    Content.ZIndex = 1
-    Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
+local function createCard(parent, title, desc)
+    local Card = Instance.new("Frame", parent)
+    Card.Size = UDim2.new(1, -20, 0, 120)
+    Card.Position = UDim2.new(0, 10, 0, 10)
+    Card.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+    Card.BackgroundTransparency = 0.1
+    Instance.new("UICorner", Card).CornerRadius = UDim.new(0, 8)
 
-    local stroke = Instance.new("UIStroke")
-    stroke.Parent = Content
-    stroke.Color = Color3.fromRGB(50, 100, 200)
-    stroke.Thickness = 1
-    stroke.Transparency = 0.4
+    local Title = Instance.new("TextLabel", Card)
+    Title.Size = UDim2.new(1, -20, 0, 30)
+    Title.Position = UDim2.new(0, 10, 0, 8)
+    Title.Text = title
+    Title.TextColor3 = Color3.fromRGB(230,230,230)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 15
+    Title.BackgroundTransparency = 1
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+
+    local Desc = Instance.new("TextLabel", Card)
+    Desc.Size = UDim2.new(1, -20, 0, 50)
+    Desc.Position = UDim2.new(0, 10, 0, 40)
+    Desc.Text = desc
+    Desc.TextColor3 = Color3.fromRGB(180,180,180)
+    Desc.Font = Enum.Font.Gotham
+    Desc.TextSize = 13
+    Desc.BackgroundTransparency = 1
+    Desc.TextWrapped = true
+    Desc.TextXAlignment = Enum.TextXAlignment.Left
+    Desc.TextYAlignment = Enum.TextYAlignment.Top
+end
+
     
 -- fungsi buat tombol sidebar dengan highlight
-local ActiveTab
-local function createSidebarButton(name, callback)
+local function createSidebarButton(name, parent, callback)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -10, 0, 35)
-    btn.BackgroundColor3 = Color3.fromRGB(25,25,30)
+    btn.Size = UDim2.new(1, -15, 0, 36)
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+    btn.BackgroundTransparency = 0.3
     btn.Text = name
-    btn.Font = Enum.Font.GothamBold
-    btn.TextColor3 = Color3.fromRGB(200,200,200)
+    btn.Font = Enum.Font.Gotham
     btn.TextSize = 14
+    btn.TextColor3 = Color3.fromRGB(220,220,220)
     btn.TextXAlignment = Enum.TextXAlignment.Left
-    btn.Parent = Sidebar
-    Instance.new("UICorner", btn).CornerRadius = UDim.new(0,6)
+    btn.AutoButtonColor = false
+    btn.Parent = parent
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
 
-    btn.MouseButton1Click:Connect(function()
-        if ActiveTab then
-            TweenService:Create(ActiveTab, TweenInfo.new(0.2), {
-                BackgroundColor3 = Color3.fromRGB(25,25,30),
-                TextColor3 = Color3.fromRGB(200,200,200)
-            }):Play()
-        end
-        ActiveTab = btn
-        TweenService:Create(btn, TweenInfo.new(0.25), {
-            BackgroundColor3 = Color3.fromRGB(60,120,200),
-            TextColor3 = Color3.fromRGB(255,255,255)
+    -- padding kiri
+    local padding = Instance.new("UIPadding")
+    padding.Parent = btn
+    padding.PaddingLeft = UDim.new(0, 12)
+
+    -- hover animasi
+    btn.MouseEnter:Connect(function()
+        game:GetService("TweenService"):Create(btn, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(55,55,65)
         }):Play()
-        callback()
     end)
+    btn.MouseLeave:Connect(function()
+        game:GetService("TweenService"):Create(btn, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(30,30,35)
+        }):Play()
+    end)
+
+    btn.MouseButton1Click:Connect(callback)
 
     return btn
 end
+
+local function createCategory(name, parent)
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -15, 0, 20)
+    label.BackgroundTransparency = 1
+    label.Text = name
+    label.TextColor3 = Color3.fromRGB(150,150,150)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 13
+    label.Parent = parent
+
+    local padding = Instance.new("UIPadding")
+    padding.Parent = label
+    padding.PaddingLeft = UDim.new(0, 8)
+end
+
 
 -- fungsi buat tombol toggle gaya Voidware
 local function createToggle(parent, text, callback)
