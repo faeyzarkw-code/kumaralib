@@ -93,18 +93,27 @@ function Library:CreateWindow(title, version)
         ScreenGui:Destroy()
     end)
     
-     -- Tombol Minimize
+    -- Tombol Minimize
     local MinBtn = Instance.new("TextButton")
     MinBtn.Size = UDim2.new(0, 25, 0, 25)
-    MinBtn.Position = UDim2.new(1, -60, 0.5, -12)
-    MinBtn.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
+    MinBtn.Position = UDim2.new(1, -60, 0, 7)
+    MinBtn.BackgroundColor3 = Color3.fromRGB(80, 180, 250)
     MinBtn.Text = "-"
     MinBtn.TextColor3 = Color3.fromRGB(255,255,255)
     MinBtn.Font = Enum.Font.GothamBold
     MinBtn.TextSize = 18
-    CloseBtn.ZIndex = 3
+    MinBtn.ZIndex = 3
     MinBtn.Parent = TitleBar
     Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
+    
+    -- Status minimize
+    local isMinimized = false
+    
+    -- Tween configs
+    local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+    local tweenMinimize = TweenService:Create(Main, tweenInfo, { Size = UDim2.new(0, 650, 0, 40) })
+    local tweenRestore = TweenService:Create(Main, tweenInfo, { Size = UDim2.new(0, 650, 0, 420) })
+
     
     -- Sidebar (taruh ini dulu baru bikin fungsi minimize)
     local Sidebar = Instance.new("Frame")
