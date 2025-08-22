@@ -85,6 +85,7 @@ function Library:CreateWindow(title, version)
     CloseBtn.TextColor3 = Color3.fromRGB(255,255,255)
     CloseBtn.Font = Enum.Font.GothamBold
     CloseBtn.TextSize = 14
+    CloseBtn.ZIndex = 3
     CloseBtn.Parent = TitleBar
     Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(1, 0)
     
@@ -92,55 +93,56 @@ function Library:CreateWindow(title, version)
         ScreenGui:Destroy()
     end)
     
- -- Tombol Minimize
-local MinBtn = Instance.new("TextButton")
-MinBtn.Size = UDim2.new(0, 25, 0, 25)
-MinBtn.Position = UDim2.new(1, -60, 0.5, -12)
-MinBtn.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
-MinBtn.Text = "-"
-MinBtn.TextColor3 = Color3.fromRGB(255,255,255)
-MinBtn.Font = Enum.Font.GothamBold
-MinBtn.TextSize = 18
-MinBtn.Parent = TitleBar
-Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
-
--- Sidebar (taruh ini dulu baru bikin fungsi minimize)
-local Sidebar = Instance.new("Frame")
-Sidebar.Size = UDim2.new(0, 170, 1, -40)
-Sidebar.Position = UDim2.new(0, 0, 0, 40)
-Sidebar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-Sidebar.BorderSizePixel = 0
-Sidebar.Parent = Main
-Sidebar.ZIndex = 1
-
-local list = Instance.new("UIListLayout", Sidebar)
-list.SortOrder = Enum.SortOrder.LayoutOrder
-list.Padding = UDim.new(0, 5)
-
--- Content
-local Content = Instance.new("Frame")
-Content.Size = UDim2.new(1, -170, 1, -40)
-Content.Position = UDim2.new(0, 170, 0, 40)
-Content.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
-Content.BorderSizePixel = 0
-Content.Parent = Main
-Content.ZIndex = 1
-Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
-
--- Baru tambahin fungsi minimize setelah Sidebar & Content ada
-local minimized = false
-MinBtn.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    if minimized then
-        Sidebar.Visible = false
-        Content.Visible = false
-        Main.Size = UDim2.new(0, 250, 0, 40) -- shrink biar cuma titlebar
-    else
-        Sidebar.Visible = true
-        Content.Visible = true
-        Main.Size = UDim2.new(0, 650, 0, 420) -- balikin ukuran normal
-    end
-end)
+     -- Tombol Minimize
+    local MinBtn = Instance.new("TextButton")
+    MinBtn.Size = UDim2.new(0, 25, 0, 25)
+    MinBtn.Position = UDim2.new(1, -60, 0.5, -12)
+    MinBtn.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
+    MinBtn.Text = "-"
+    MinBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    MinBtn.Font = Enum.Font.GothamBold
+    MinBtn.TextSize = 18
+    CloseBtn.ZIndex = 3
+    MinBtn.Parent = TitleBar
+    Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
+    
+    -- Sidebar (taruh ini dulu baru bikin fungsi minimize)
+    local Sidebar = Instance.new("Frame")
+    Sidebar.Size = UDim2.new(0, 170, 1, -40)
+    Sidebar.Position = UDim2.new(0, 0, 0, 40)
+    Sidebar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    Sidebar.BorderSizePixel = 0
+    Sidebar.Parent = Main
+    Sidebar.ZIndex = 1
+    
+    local list = Instance.new("UIListLayout", Sidebar)
+    list.SortOrder = Enum.SortOrder.LayoutOrder
+    list.Padding = UDim.new(0, 5)
+    
+    -- Content
+    local Content = Instance.new("Frame")
+    Content.Size = UDim2.new(1, -170, 1, -40)
+    Content.Position = UDim2.new(0, 170, 0, 40)
+    Content.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+    Content.BorderSizePixel = 0
+    Content.Parent = Main
+    Content.ZIndex = 1
+    Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
+    
+    -- Baru tambahin fungsi minimize setelah Sidebar & Content ada
+    local minimized = false
+    MinBtn.MouseButton1Click:Connect(function()
+        minimized = not minimized
+        if minimized then
+            Sidebar.Visible = false
+            Content.Visible = false
+            Main.Size = UDim2.new(0, 250, 0, 40) -- shrink biar cuma titlebar
+        else
+            Sidebar.Visible = true
+            Content.Visible = true
+            Main.Size = UDim2.new(0, 650, 0, 420) -- balikin ukuran normal
+        end
+    end)
 
 
     -- fungsi buat tombol sidebar
@@ -204,6 +206,7 @@ end)
 end
 
 return Library
+
 
 
 
