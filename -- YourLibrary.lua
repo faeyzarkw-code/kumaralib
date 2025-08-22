@@ -219,6 +219,38 @@ local function createToggle(parent, text, callback)
     end)
 end
 
+local function createButton(parent, text, callback)
+    local button = Instance.new("TextButton")
+    button.Parent = parent
+    button.Size = UDim2.new(1, -10, 0, 35) -- full panjang
+    button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    button.Text = text
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 14
+    button.AutoButtonColor = true
+    button.BorderSizePixel = 0
+    button.BackgroundTransparency = 0.1
+    button.TextXAlignment = Enum.TextXAlignment.Left
+    button.Padding = UDim.new(0, 10)
+
+    -- icon di kanan
+    local icon = Instance.new("ImageLabel")
+    icon.Parent = button
+    icon.AnchorPoint = Vector2.new(1, 0.5)
+    icon.Position = UDim2.new(1, -10, 0.5, 0)
+    icon.Size = UDim2.new(0, 20, 0, 20)
+    icon.Image = "rbxassetid://7072706625" -- contoh icon, bisa diganti
+
+    -- action kalau di klik
+    button.MouseButton1Click:Connect(function()
+        callback()
+    end)
+
+    return button
+end
+
+
 
     -- contoh isi sidebar
     createSidebarButton("Home", function()
@@ -266,21 +298,14 @@ createSidebarButton("Auto Buy", function()
     createToggle(Content, "Auto Buy Event Box", function(state)
         autoBuy = state
     end)
-createToggle(Content, "Open Unlock Box", function(state)
-    autoUnlock = state
-    
-    if state then
-        task.spawn(function()
-            while autoUnlock do
-                local prompt = workspace.Event["Unlock Box"].OpenKeyMaster
-                pcall(function()
-                    fireproximityprompt(prompt)
-                end)
-                task.wait(1) -- delay biar ga terlalu spam
-            end
-        end)
-    end
+
+createButton(Content, "Open Unlock Box", function()
+    local prompt = workspace.Event["Unlock Box"].OpenKeyMaster
+    pcall(function()
+        fireproximityprompt(prompt)
+    end)
 end)
+
 end)
 
 
