@@ -58,8 +58,9 @@ function Library:CreateWindow(title, version)
     -- TitleBar
     local TitleBar = Instance.new("Frame")
     TitleBar.Size = UDim2.new(1, 0, 0, 40)
-    TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+    TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
     TitleBar.BorderSizePixel = 0
+    TitleBar.BackgroundTransparency = 0
     TitleBar.Parent = Main
     TitleBar.ZIndex = 2
 
@@ -80,14 +81,15 @@ function Library:CreateWindow(title, version)
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Size = UDim2.new(0, 25, 0, 25)
     CloseBtn.Position = UDim2.new(1, -30, 0.5, -12)
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
     CloseBtn.Text = "X"
     CloseBtn.TextColor3 = Color3.fromRGB(255,255,255)
     CloseBtn.Font = Enum.Font.GothamBold
     CloseBtn.TextSize = 14
     CloseBtn.ZIndex = 3
     CloseBtn.Parent = TitleBar
-    Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(1, 0)
+    CloseBtn.TextScaled = true
+    CloseBtn.AutoButtonColor = true
     
     CloseBtn.MouseButton1Click:Connect(function()
         ScreenGui:Destroy()
@@ -97,24 +99,25 @@ function Library:CreateWindow(title, version)
     local MinBtn = Instance.new("TextButton")
     MinBtn.Size = UDim2.new(0, 25, 0, 25)
     MinBtn.Position = UDim2.new(1, -60, 0, 7)
-    MinBtn.BackgroundColor3 = Color3.fromRGB(80, 180, 250)
+    MinBtn.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
     MinBtn.Text = "-"
     MinBtn.TextColor3 = Color3.fromRGB(255,255,255)
     MinBtn.Font = Enum.Font.GothamBold
     MinBtn.TextSize = 18
     MinBtn.ZIndex = 3
     MinBtn.Parent = TitleBar
-    Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
+    CloseBtn.TextScaled = true
+    CloseBtn.AutoButtonColor = true
     
     -- Sidebar
     local Sidebar = Instance.new("Frame")
     Sidebar.Size = UDim2.new(0, 170, 1, -40)
     Sidebar.Position = UDim2.new(0, 0, 0, 40)
-    Sidebar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    Sidebar.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
     Sidebar.BorderSizePixel = 0
     Sidebar.Parent = Main
     Sidebar.ZIndex = 1
-    
+
     local list = Instance.new("UIListLayout", Sidebar)
     list.SortOrder = Enum.SortOrder.LayoutOrder
     list.Padding = UDim.new(0, 5)
@@ -125,9 +128,16 @@ function Library:CreateWindow(title, version)
     Content.Position = UDim2.new(0, 170, 0, 40)
     Content.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
     Content.BorderSizePixel = 0
+    Content.ClipsDescendants = true
     Content.Parent = Main
     Content.ZIndex = 1
     Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Parent = Content
+    stroke.Color = Color3.fromRGB(50, 100, 200)
+    stroke.Thickness = 1
+    stroke.Transparency = 0.4
     
 -- fungsi buat tombol sidebar dengan highlight
 local ActiveTab
