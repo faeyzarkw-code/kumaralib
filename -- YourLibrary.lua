@@ -299,18 +299,22 @@ createSidebarButton("Auto Buy", function()
         autoBuy = state
     end)
 
-createButton(Content, "Open Unlock Box", function()
-    local prompt = workspace.Event["Unlock Box"].OpenKeyMaster
-    task.spawn(function()
-        for i = 1, 5 do -- coba 5x biar mirip toggle
-            pcall(function()
-                fireproximityprompt(prompt)
-            end)
-            task.wait(0.5) -- jeda setengah detik
-        end
-    end)
-end)
 
+createButton(Content, "Open Unlock Box", function(state)
+    autoUnlock = state
+    
+    if state then
+        task.spawn(function()
+            while autoUnlock do
+                local prompt = workspace.Event["Unlock Box"].OpenKeyMaster
+                pcall(function()
+                    fireproximityprompt(prompt)
+                end)
+                task.wait(1) -- delay biar ga terlalu spam
+            end
+        end)
+    end
+end)
 end)
 
 
