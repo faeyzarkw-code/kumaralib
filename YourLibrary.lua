@@ -144,62 +144,38 @@ function Library:CreateWindow(title, version)
     stroke.Color = Color3.fromRGB(50, 100, 200)
     stroke.Thickness = 1
     stroke.Transparency = 0.4
-
-    
     
 -- fungsi buat tombol sidebar dengan highlight
-local function createSidebarButton(name, parent, callback)
+local ActiveTab
+local function createSidebarButton(name, callback)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -15, 0, 36)
-    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-    btn.BackgroundTransparency = 0.3
+    btn.Size = UDim2.new(1, -10, 0, 35)
+    btn.BackgroundColor3 = Color3.fromRGB(25,25,30)
     btn.Text = name
-    btn.Font = Enum.Font.Gotham
+    btn.Font = Enum.Font.GothamBold
+    btn.TextColor3 = Color3.fromRGB(200,200,200)
     btn.TextSize = 14
-    btn.TextColor3 = Color3.fromRGB(220,220,220)
     btn.TextXAlignment = Enum.TextXAlignment.Left
-    btn.AutoButtonColor = false
-    btn.Parent = parent
-    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+    btn.Parent = Sidebar
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0,6)
 
-    -- padding kiri
-    local padding = Instance.new("UIPadding")
-    padding.Parent = btn
-    padding.PaddingLeft = UDim.new(0, 12)
-
-    -- hover animasi
-    btn.MouseEnter:Connect(function()
-        game:GetService("TweenService"):Create(btn, TweenInfo.new(0.2), {
-            BackgroundColor3 = Color3.fromRGB(55,55,65)
+    btn.MouseButton1Click:Connect(function()
+        if ActiveTab then
+            TweenService:Create(ActiveTab, TweenInfo.new(0.2), {
+                BackgroundColor3 = Color3.fromRGB(25,25,30),
+                TextColor3 = Color3.fromRGB(200,200,200)
+            }):Play()
+        end
+        ActiveTab = btn
+        TweenService:Create(btn, TweenInfo.new(0.25), {
+            BackgroundColor3 = Color3.fromRGB(60,120,200),
+            TextColor3 = Color3.fromRGB(255,255,255)
         }):Play()
+        callback()
     end)
-    btn.MouseLeave:Connect(function()
-        game:GetService("TweenService"):Create(btn, TweenInfo.new(0.2), {
-            BackgroundColor3 = Color3.fromRGB(30,30,35)
-        }):Play()
-    end)
-
-    btn.MouseButton1Click:Connect(callback)
 
     return btn
 end
-
-local function createCategory(name, parent)
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, -15, 0, 20)
-    label.BackgroundTransparency = 1
-    label.Text = name
-    label.TextColor3 = Color3.fromRGB(150,150,150)
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 13
-    label.Parent = parent
-
-    local padding = Instance.new("UIPadding")
-    padding.Parent = label
-    padding.PaddingLeft = UDim.new(0, 8)
-end
-
 
 -- fungsi buat tombol toggle gaya Voidware
 local function createToggle(parent, text, callback)
